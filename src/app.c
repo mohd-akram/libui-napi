@@ -7,6 +7,10 @@
 #include "event-loop.h"
 #include "events.h"
 
+#ifdef _WIN32
+#include <Windows.h>
+#endif
+
 static const char *MODULE = "App";
 
 struct children_list *visible_windows = NULL;
@@ -69,6 +73,10 @@ LIBUI_FUNCTION(init) {
 
 	status = napi_create_reference(env, global, 1, &null_ref);
 	CHECK_STATUS_THROW(status, napi_create_reference);
+
+#ifdef _WIN32
+	SetProcessDPIAware();
+#endif
 
 	return NULL;
 }
